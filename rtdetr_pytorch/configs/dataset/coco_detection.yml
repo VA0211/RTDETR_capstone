@@ -7,14 +7,14 @@ train_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /content/demo_count_items-3/train/
-    ann_file: /content/demo_count_items-3/train/_annotations.coco.json
+    img_folder: /content/train/
+    ann_file: /content/train/_annotations.coco.json
     transforms:
       type: Compose
       ops: ~
   shuffle: True
   batch_size: 8
-  num_workers: 1
+  num_workers: 2
   drop_last: True 
 
 
@@ -22,13 +22,13 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /content/demo_count_items-3/valid/
-    ann_file: /content/demo_count_items-3/valid/_annotations.coco.json
+    img_folder: /content/valid/
+    ann_file: /content/valid/_annotations.coco.json
     transforms:
       type: Compose
       ops: ~ 
 
   shuffle: False
   batch_size: 8
-  num_workers: 1
+  num_workers: 2
   drop_last: False
