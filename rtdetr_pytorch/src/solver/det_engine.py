@@ -73,6 +73,8 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         loss_dict_reduced = reduce_dict(loss_dict)
         loss_value = sum(loss_dict_reduced.values())
+        print("\n-------- TRAIN LOSS (loss_value): {} -------".format(loss_value))
+        print("-------- TRAIN LOSS (loss_dict_reduced): {} -------\n".format(loss_dict_reduced))
 
         if not math.isfinite(loss_value):
             print("Loss is {}, stopping training".format(loss_value))
@@ -120,14 +122,19 @@ def evaluate(model: torch.nn.Module, criterion: torch.nn.Module, postprocessors,
 
         outputs = model(samples)
 
-        # loss_dict = criterion(outputs, targets)
-        # weight_dict = criterion.weight_dict
+        loss_dict = criterion(outputs, targets)
+        weight_dict = criterion.weight_dict
         # # reduce losses over all GPUs for logging purposes
-        # loss_dict_reduced = reduce_dict(loss_dict)
-        # loss_dict_reduced_scaled = {k: v * weight_dict[k]
-        #                             for k, v in loss_dict_reduced.items() if k in weight_dict}
-        # loss_dict_reduced_unscaled = {f'{k}_unscaled': v
-        #                               for k, v in loss_dict_reduced.items()}
+        loss_dict_reduced = reduce_dict(loss_dict)
+        loss_dict_reduced_scaled = {k: v * weight_dict[k]
+                                    for k, v in loss_dict_reduced.items() if k in weight_dict}
+        loss_dict_reduced_unscaled = {f'{k}_unscaled': v
+                                      for k, v in loss_dict_reduced.items()}
+        
+        print("\n-------- VAL LOSS (loss_value): {} -------".format(sum(loss_dict_reduced.values()) ))
+        print("-------- VAL LOSS (loss_dict_reduced_scaled): {} -------".format(loss_dict_reduced_scaled))
+        print("-------- VAL LOSS (loss_dict_reduced_unscaled): {} -------\n".format(loss_dict_reduced_unscaled))
+
         # metric_logger.update(loss=sum(loss_dict_reduced_scaled.values()),
         #                      **loss_dict_reduced_scaled,
         #                      **loss_dict_reduced_unscaled)
