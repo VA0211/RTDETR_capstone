@@ -107,3 +107,6 @@ python tools/export_onnx.py -c configs/rtdetr/rtdetr_r18vd_6x_coco.yml -r path/t
 
 2. add `-t path/to/checkpoint` (optinal) to tuning rtdetr based on pretrained checkpoint. see [training script details](./tools/README.md).
 </details>
+
+---
+rtdetr_pytorch\src\zoo\rtdetr\rtdetr_postprocessor.py (50 - boxes = bbox_pred)
