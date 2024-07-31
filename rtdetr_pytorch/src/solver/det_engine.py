@@ -73,8 +73,11 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         loss_dict_reduced = reduce_dict(loss_dict)
         loss_value = sum(loss_dict_reduced.values())
-        print("\n-------- TRAIN LOSS (loss_value): {} -------".format(loss_value))
-        print("-------- TRAIN LOSS (loss_dict_reduced): {} -------\n".format(loss_dict_reduced))
+
+        print("-"*20)
+        print("TRAIN LOSS (loss_value): {}".format(loss_value))
+        print("TRAIN LOSS (loss_dict_reduced): {}".format(loss_dict_reduced))
+        print("-"*20)
 
         if not math.isfinite(loss_value):
             print("Loss is {}, stopping training".format(loss_value))
@@ -130,15 +133,16 @@ def evaluate(model: torch.nn.Module, criterion: torch.nn.Module, postprocessors,
                                     for k, v in loss_dict_reduced.items() if k in weight_dict}
         loss_dict_reduced_unscaled = {f'{k}_unscaled': v
                                       for k, v in loss_dict_reduced.items()}
-        
-        print("\n-------- VAL LOSS (loss_value): {} -------".format(sum(loss_dict_reduced.values()) ))
-        print("-------- VAL LOSS (loss_dict_reduced_scaled): {} -------".format(loss_dict_reduced_scaled))
-        print("-------- VAL LOSS (loss_dict_reduced_unscaled): {} -------\n".format(loss_dict_reduced_unscaled))
+        print("-"*20)
+        print("VAL LOSS (loss_value): {}".format(sum(loss_dict_reduced.values()) ))
+        print("VAL LOSS (loss_dict_reduced_scaled): {}".format(loss_dict_reduced_scaled))
+        print("VAL LOSS (loss_dict_reduced_unscaled): {}".format(loss_dict_reduced_unscaled))
+        print("-"*20)
 
-        # metric_logger.update(loss=sum(loss_dict_reduced_scaled.values()),
-        #                      **loss_dict_reduced_scaled,
-        #                      **loss_dict_reduced_unscaled)
-        # metric_logger.update(class_error=loss_dict_reduced['class_error'])
+        metric_logger.update(loss=sum(loss_dict_reduced_scaled.values()),
+                             **loss_dict_reduced_scaled,
+                             **loss_dict_reduced_unscaled)
+        metric_logger.update(class_error=loss_dict_reduced['class_error'])
 
         orig_target_sizes = torch.stack([t["orig_size"] for t in targets], dim=0)        
         results = postprocessors(outputs, orig_target_sizes)
