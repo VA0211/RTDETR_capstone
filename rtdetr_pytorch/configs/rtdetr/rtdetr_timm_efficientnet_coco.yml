@@ -17,7 +17,7 @@ Timm:
   model_type: tf_efficientnetv2_l.in21k_ft_in1k
 
 HybridEncoder:
-  in_channels: [16,24,288]
+  in_channels: [16,96,288]
   hidden_dim: 256
   expansion: 0.5
   depth_mult: 1.0
