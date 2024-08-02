@@ -7,6 +7,17 @@ import torch.nn as nn
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from src.core import YAMLConfig
 
+class Model(nn.Module):
+    def __init__(self, cfg):
+        super().__init__()
+        self.model = cfg.model.deploy()
+        self.postprocessor = cfg.postprocessor.deploy()
+        print(self.postprocessor.deploy_mode)
+        
+    def forward(self, images, orig_target_sizes):
+        outputs = self.model(images)
+        return self.postprocessor(outputs, orig_target_sizes)
+
 def main(args):
     """main
     """
@@ -24,18 +35,7 @@ def main(args):
     # NOTE load train mode state -> convert to deploy mode
     cfg.model.load_state_dict(state)
 
-    class Model(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.model = cfg.model.deploy()
-            self.postprocessor = cfg.postprocessor.deploy()
-            print(self.postprocessor.deploy_mode)
-            
-        def forward(self, images, orig_target_sizes):
-            outputs = self.model(images)
-            return self.postprocessor(outputs, orig_target_sizes)
-    
-    model = Model()
+    model = Model(cfg)
 
     # Save the entire model
     torch.save(model, args.file_name)
