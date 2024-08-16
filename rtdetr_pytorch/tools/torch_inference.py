@@ -104,6 +104,7 @@ def main(args):
             box = boxes[i][scr > thrh]
 
             # Map the category ID to the class name
+            print('Model predict:', lab[i])
             category_id = coco_dataset.mscoco_label2category[lab[i].item()]
             class_name = coco_dataset.mscoco_category2name[category_id]
 
