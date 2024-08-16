@@ -52,11 +52,11 @@ class Model(nn.Module):
         return self.postprocessor(outputs, orig_target_sizes)
 
 
-def main(image_path, device, config, checkpoint):
-    img_path = Path(image_path)
-    device = torch.device(device)
+def main(args):
+    img_path = Path(args.image)
+    device = torch.device(args.device)
     reader = ImageReader(resize=640)
-    model = Model(confg=config, ckpt=checkpoint)
+    model = Model(confg=args.config, ckpt=args.ckpt)
     model.to(device=device)
 
     img = reader(img_path).to(device)
@@ -86,8 +86,8 @@ def main(image_path, device, config, checkpoint):
             draw.text((b[0], b[1]), text=str(lab[i]), fill='blue', )
 
     # save_path = Path(args.output_dir) / img_path.name
-    file_dir = os.path.dirname(image_path)
-    new_file_name = os.path.basename(image_path).split('.')[0] + '_torch'+ os.path.splitext(image_path)[1]
+    file_dir = os.path.dirname(args.image)
+    new_file_name = os.path.basename(args.image).split('.')[0] + '_torch'+ os.path.splitext(args.image)[1]
     new_file_path = file_dir + '/' + new_file_name
     print('new_file_path: ', new_file_path)
     im.save(new_file_path)
