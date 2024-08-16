@@ -89,7 +89,7 @@ def main(args):
 
         for b in box:
             draw.rectangle(list(b), outline='red',)
-            draw.text((b[0], b[1]), text=str(lab[i]), fill='yellow', )
+            draw.text((b[0], b[1]), text=str(lab[i].item()), fill='yellow', )
             
     file_dir = Path(img_path).parent.parent / 'torch_output'
     createDirectory(file_dir)
