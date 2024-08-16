@@ -51,6 +51,12 @@ class Model(nn.Module):
         outputs = self.model(images)
         return self.postprocessor(outputs, orig_target_sizes)
 
+def createDirectory(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print("Error: Failed to create the directory.")
 
 def main(args):
     img_path = Path(args.image)
@@ -73,7 +79,7 @@ def main(args):
     
     im = reader.pil_img
     draw = ImageDraw.Draw(im)
-    thrh = 0.6
+    thrh = args.threshold
 
     for i in range(img.shape[0]):
 
@@ -82,23 +88,25 @@ def main(args):
         box = boxes[i][scr > thrh]
 
         for b in box:
-            draw.rectangle(list(b), outline='red', )
-            draw.text((b[0], b[1]), text=str(lab[i]), fill='blue', )
-
-    # save_path = Path(args.output_dir) / img_path.name
-    file_dir = os.path.dirname(args.image)
-    new_file_name = os.path.basename(args.image).split('.')[0] + '_torch'+ os.path.splitext(args.image)[1]
-    new_file_path = file_dir + '/' + new_file_name
+            draw.rectangle(list(b), outline='red',)
+            draw.text((b[0], b[1]), text=str(lab[i]), fill='yellow', )
+            
+    file_dir = Path(img_path).parent.parent / 'torch_output'
+    createDirectory(file_dir)
+    new_file_name = os.path.basename(img_path).split('.')[0] + '_torch'+ os.path.splitext(img_path)[1]
+    new_file_path = file_dir / new_file_name
     print('new_file_path: ', new_file_path)
+    print("================================================================================")
     im.save(new_file_path)
  
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", '-c', type=str, )
-    parser.add_argument("--ckpt", '-w', type=str, ) # pth
+    parser.add_argument("--config", '-c', type=str, ) #pth
+    parser.add_argument("--ckpt", '-w', type=str, ) #pth
     parser.add_argument("--image", '-i', type=str, ) 
+    parser.add_argument("--threshold", '-t', default=0.6)
     parser.add_argument("--device", '-d', default="cpu")
     args = parser.parse_args()
 
