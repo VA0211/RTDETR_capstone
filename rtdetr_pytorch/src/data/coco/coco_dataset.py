@@ -235,16 +235,27 @@ class ConvertCocoPolysToMask(object):
 # }
 
 mscoco_category2name = {
-    1: 'class1',
-    2: 'class2',
-    3: 'class3',
-    4: 'class4',
-    5: 'class5',
-    6: 'class6',
-    7: 'class7',
-    8: 'class8',
-    9: 'class10',
-    10: 'class10_1',
+    # 1: 'class1',
+    # 2: 'class2',
+    # 3: 'class3',
+    # 4: 'class4',
+    # 5: 'class5',
+    # 6: 'class6',
+    # 7: 'class7',
+    # 8: 'class8',
+    # 9: 'class10',
+    # 10: 'class10_1',
+    # {"id":0,"name":"screws-evaG-NYp3","supercategory":"none"},
+    1:"class1",
+    2:"class10",
+    3:"class10_1",
+    4:"class2",
+    5:"class3",
+    6:"class4",
+    7:"class5",
+    8:"class6",
+    9:"class7",
+    10:"class8"
 }
 
 mscoco_category2label = {k: i for i, k in enumerate(mscoco_category2name.keys())}

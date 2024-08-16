@@ -5,6 +5,7 @@ import time
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from src.core import YAMLConfig 
+from src.data.coco import coco_dataset
 
 import torch
 from torch import nn
@@ -59,45 +60,70 @@ def createDirectory(directory):
         print("Error: Failed to create the directory.")
 
 def main(args):
-    img_path = Path(args.image)
     device = torch.device(args.device)
     reader = ImageReader(resize=640)
     model = Model(confg=args.config, ckpt=args.ckpt)
     model.to(device=device)
+    img_path_list = []
+    all_inf_time = []
 
-    img = reader(img_path).to(device)
-    size = torch.tensor([[img.shape[2], img.shape[3]]]).to(device)
+    if args.imgpath != None:
+        possible_img_extension = ['.jpg', '.jpeg', '.JPG', '.bmp', '.png']
+        for (root, dirs, files) in os.walk(args.imgpath):
+            if len(files) > 0:
+                for file_name in files:
+                    if os.path.splitext(file_name)[1] in possible_img_extension:
+                        img_path = root + '/' + file_name
+                        img_path_list.append(img_path)
+    else:
+        img_path_list.append(args.image)
     
-    start_time = time.time()
-    output = model(img, size)
-    inf_time = time.time() - start_time
-    fps = float(1/inf_time)
-    print("Inferece time = {} s".format(inf_time, '.4f'))
-    print("FPS = {} ".format(fps, '.1f') )
-    
-    labels, boxes, scores = output
-    
-    im = reader.pil_img
-    draw = ImageDraw.Draw(im)
-    thrh = args.threshold
+    for path in img_path_list:
+        img_path = Path(path)
+        img = reader(img_path).to(device)
+        size = torch.tensor([[img.shape[2], img.shape[3]]]).to(device)
+        
+        start_time = time.time()
+        output = model(img, size)
+        inf_time = time.time() - start_time
+        fps = float(1/inf_time)
+        print(f"Inferece time = {inf_time:.4f} s")
+        print(f"FPS = {fps:.2f}")
+        all_inf_time.append(inf_time)
+        
+        labels, boxes, scores = output
+        
+        im = reader.pil_img
+        draw = ImageDraw.Draw(im)
+        thrh = args.threshold
 
-    for i in range(img.shape[0]):
+        for i in range(img.shape[0]):
 
-        scr = scores[i]
-        lab = labels[i][scr > thrh]
-        box = boxes[i][scr > thrh]
+            scr = scores[i]
+            lab = labels[i][scr > thrh]
+            box = boxes[i][scr > thrh]
 
-        for b in box:
-            draw.rectangle(list(b), outline='red',)
-            draw.text((b[0], b[1]), text=str(lab[i].item()), fill='yellow', )
-            
-    file_dir = Path(img_path).parent.parent / 'torch_output'
-    createDirectory(file_dir)
-    new_file_name = os.path.basename(img_path).split('.')[0] + '_torch'+ os.path.splitext(img_path)[1]
-    new_file_path = file_dir / new_file_name
-    print('new_file_path: ', new_file_path)
-    print("================================================================================")
-    im.save(new_file_path)
+            # Map the category ID to the class name
+            category_id = coco_dataset.mscoco_label2category[lab[i].item()]
+            class_name = coco_dataset.mscoco_category2name[category_id]
+
+            for b in box:
+                draw.rectangle(list(b), outline='red',)
+                draw.text((b[0], b[1]), text=str(class_name), fill='yellow', )
+                
+        file_dir = Path(img_path).parent.parent / 'torch_output'
+        createDirectory(file_dir)
+        new_file_name = os.path.basename(img_path).split('.')[0] + '_torch'+ os.path.splitext(img_path)[1]
+        new_file_path = file_dir / new_file_name
+        print('New File Path: ', new_file_path)
+        print("================================================================================")
+        im.save(new_file_path)
+
+    avr_time = sum(all_inf_time) / len(img_path_list)
+    avr_fps = float(1/avr_time)
+    print('All images count: {}'.format(len(img_path_list)))
+    print(f"Average Inference time = {avr_time:.4f} s")
+    print(f"Average FPS = {avr_fps:.2f}")
  
 
 if __name__ == '__main__':
@@ -105,7 +131,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", '-c', type=str, ) #pth
     parser.add_argument("--ckpt", '-w', type=str, ) #pth
-    parser.add_argument("--image", '-i', type=str, ) 
+    parser.add_argument("--image", '-i', type=str, ) #pth
+    parser.add_argument("--imgpath", '-ipth', type=str, default=None) #pth
     parser.add_argument("--threshold", '-t', type=float, default=0.6)
     parser.add_argument("--device", '-d', default="cpu")
     args = parser.parse_args()
