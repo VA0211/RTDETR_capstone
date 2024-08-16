@@ -3,12 +3,12 @@ from pathlib import Path
 import sys
 import time
 import os
-import onnxruntime as ort
 import torch
 from PIL import Image, ImageDraw
 from torchvision import transforms
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from src.data.coco import coco_dataset
+import onnxruntime as ort
 
 class ImageReader:
     def __init__(self, resize=640):
@@ -90,7 +90,7 @@ def main(args):
         createDirectory(file_dir)
         new_file_name = os.path.basename(img_path).split('.')[0] + '_onnx' + os.path.splitext(img_path)[1]
         new_file_path = file_dir / new_file_name
-        print('New File Path: ', new_file_path)
+        print('New File Path:', new_file_path)
         print("================================================================================")
         im.save(new_file_path)
 
