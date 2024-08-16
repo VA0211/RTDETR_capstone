@@ -106,7 +106,7 @@ if __name__ == '__main__':
     parser.add_argument("--config", '-c', type=str, ) #pth
     parser.add_argument("--ckpt", '-w', type=str, ) #pth
     parser.add_argument("--image", '-i', type=str, ) 
-    parser.add_argument("--threshold", '-t', default=0.6)
+    parser.add_argument("--threshold", '-t', type=float, default=0.6)
     parser.add_argument("--device", '-d', default="cpu")
     args = parser.parse_args()
 
