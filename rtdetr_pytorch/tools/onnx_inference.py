@@ -78,15 +78,17 @@ def main(args):
             lab = labels[i][scr > thrh]
             box = boxes[i][scr > thrh]
 
+            if lab.size(0) == 0:  # Check if lab is empty
+                continue  # Skip this iteration if no objects are detected
+            
             # Map the category ID to the class name
             # print('Model predict:', lab[i])
-            if lab[i].size != 0:
-                category_id = coco_dataset.mscoco_label2category[lab[i]]
-                class_name = coco_dataset.mscoco_category2name[category_id]
+            category_id = coco_dataset.mscoco_label2category[lab[i]]
+            class_name = coco_dataset.mscoco_category2name[category_id]
 
-                for b in box:
-                    draw.rectangle(list(b), outline='red')
-                    draw.text((b[0], b[1]), text=str(class_name), fill='yellow')
+            for b in box:
+                draw.rectangle(list(b), outline='red')
+                draw.text((b[0], b[1]), text=str(class_name), fill='yellow')
                 
         file_dir = Path(img_path).parent.parent / 'onnx_output'
         createDirectory(file_dir)
