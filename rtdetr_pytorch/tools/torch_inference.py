@@ -106,7 +106,7 @@ def main(args):
             # Map the category ID to the class name
             # print('Model predict:', lab[i])
             if lab[i].size != 0:
-                category_id = coco_dataset.mscoco_label2category[lab[i]]
+                category_id = coco_dataset.mscoco_label2category[lab[i].item()]
                 class_name = coco_dataset.mscoco_category2name[category_id]
 
                 for b in box:
