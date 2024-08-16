@@ -78,7 +78,7 @@ def main(args):
             lab = labels[i][scr > thrh]
             box = boxes[i][scr > thrh]
 
-            if lab.size(0) == 0:  # Check if lab is empty
+            if len(lab) == 0:  # Check if lab is empty
                 continue  # Skip this iteration if no objects are detected
             
             # Map the category ID to the class name
