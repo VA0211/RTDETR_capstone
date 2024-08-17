@@ -80,13 +80,16 @@ def main(args):
 
             if len(lab) == 0:  # Check if lab is empty
                 continue  # Skip this iteration if no objects are detected
-            
-            # Map the category ID to the class name
-            # print('Model predict:', lab[i])
-            category_id = coco_dataset.mscoco_label2category[lab[i]]
-            class_name = coco_dataset.mscoco_category2name[category_id]
+    
+            # Iterate over each box and corresponding label
+            for j in range(box.shape[0]):
+                b = box[j]
+                l = lab[j]  # Get the corresponding label for this box
 
-            for b in box:
+                # Map the category ID to the class name
+                category_id = coco_dataset.mscoco_label2category[l]
+                class_name = coco_dataset.mscoco_category2name[category_id]
+
                 draw.rectangle(list(b), outline='red')
                 draw.text((b[0], b[1]), text=str(class_name), fill='yellow')
                 
