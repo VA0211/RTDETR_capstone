@@ -92,7 +92,7 @@ def main(args):
         all_inf_time.append(inf_time)
         
         labels, boxes, scores = output
-        print('Model output:', output)
+        # print('Model output:', output)
         im = reader.pil_img
         draw = ImageDraw.Draw(im)
         thrh = args.threshold
