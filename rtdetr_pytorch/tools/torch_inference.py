@@ -111,9 +111,16 @@ def main(args):
             # category_id = coco_dataset.mscoco_label2category[lab[i].item()]
             # class_name = coco_dataset.mscoco_category2name[category_id]
 
-            for b in box:
+            # for b in box:
+            #     draw.rectangle(list(b), outline='red')
+            #     draw.text((b[0], b[1]), text=str(lab[i].item()), fill='yellow')
+            # Iterate over each box and corresponding label
+            for j in range(box.shape[0]):
+                b = box[j]
+                l = lab[j].item()  # Get the corresponding label for this box
+
                 draw.rectangle(list(b), outline='red')
-                draw.text((b[0], b[1]), text=str(lab[i].item()), fill='yellow')
+                draw.text((b[0], b[1]), text=str(l), fill='yellow')
                 
         file_dir = Path(img_path).parent.parent / 'torch_output'
         createDirectory(file_dir)
