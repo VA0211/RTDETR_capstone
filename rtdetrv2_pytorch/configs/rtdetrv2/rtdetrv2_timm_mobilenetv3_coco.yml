@@ -15,7 +15,7 @@ RTDETR:
 
 TimmModel:
   name: mobilenetv3_small_050.lamb_in1k
-  return_layers: ['bn1', 'blocks.1']
+  return_layers: ['bn1', 'blocks.1.1.conv_pwl']
 
 HybridEncoder:
   in_channels: [16, 24, 288]
