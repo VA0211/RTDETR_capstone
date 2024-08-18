@@ -4,7 +4,7 @@ __include__: [
   '../runtime.yml',
   './include/dataloader.yml',
   './include/optimizer.yml',
-  './include/rtdetr_r50vd.yml',
+  './include/rtdetrv2_r50vd.yml',
 ]
 
 
