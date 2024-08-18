@@ -9,7 +9,6 @@ from torchvision.models.feature_extraction import get_graph_node_names, create_f
 from .utils import IntermediateLayerGetter
 from ...core import register
 
-__all__ = ['Timm']
 
 @register()
 class TimmModel(torch.nn.Module):
