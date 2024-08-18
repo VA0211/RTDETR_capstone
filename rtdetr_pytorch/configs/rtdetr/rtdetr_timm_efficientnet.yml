@@ -17,7 +17,7 @@ Timm:
   model_type: tf_efficientnetv2_b0.in1k
 
 HybridEncoder:
-  in_channels: [48, 112, 320]
+  in_channels: [48, 112, 192]
   hidden_dim: 256
   expansion: 0.5
   depth_mult: 1.0
@@ -37,11 +37,11 @@ optimizer:
   params: 
     - 
       params: '^(?=.*backbone)(?=.*norm).*$'
-      lr: 0.00001
+      lr: 0.0001
       weight_decay: 0.
     - 
       params: '^(?=.*backbone)(?!.*norm).*$'
-      lr: 0.00001
+      lr: 0.0001
     - 
       params: '^(?=.*(?:encoder|decoder))(?=.*(?:norm|bias)).*$'
       weight_decay: 0.
