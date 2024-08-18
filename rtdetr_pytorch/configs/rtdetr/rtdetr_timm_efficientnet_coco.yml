@@ -14,7 +14,7 @@ RTDETR:
   backbone: Timm
 
 Timm:
-  model_type: tf_efficientnetv2_l.in21k_ft_in1k
+  model_type: tf_efficientnetv2_b0.in1k
 
 HybridEncoder:
   in_channels: [96, 224, 640]
