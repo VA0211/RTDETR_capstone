@@ -39,8 +39,8 @@ class TimmModel(torch.nn.Module):
         assert set(return_layers).issubset(model.feature_info.module_name()), \
             f'return_layers should be a subset of {model.feature_info.module_name()}'
         
-        # self.model = model
-        self.model = IntermediateLayerGetter(model, return_layers)
+        self.model = model
+        # self.model = IntermediateLayerGetter(model, return_layers)
 
         return_idx = [model.feature_info.module_name().index(name) for name in return_layers]
         self.strides = [model.feature_info.reduction()[i] for i in return_idx]
