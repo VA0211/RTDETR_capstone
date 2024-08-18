@@ -8,7 +8,7 @@ __include__: [
 ]
 
 
-output_dir: ./output/rtdetr_timm_mobilenetv3_coco
+output_dir: ./output/rtdetrv2_timm_mobilenetv3_coco
 
 RTDETR: 
   backbone: Timm
