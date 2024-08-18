@@ -10,8 +10,10 @@ __include__: [
 
 output_dir: ./output/rtdetrv2_timm_mobilenetv3_coco
 
-model:
-  type: TimmModel
+RTDETR: 
+  backbone: TimmModel
+
+TimmModel:
   name: mobilenetv3_small_050.lamb_in1k
 
 HybridEncoder:
